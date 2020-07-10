@@ -1,5 +1,6 @@
 package com.geekbrains.java.lesson10;
 
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Car implements Runnable {
@@ -8,8 +9,8 @@ public class Car implements Runnable {
     private Race race;
     private int speed;
     private String name;
-    private static AtomicInteger allReady = new AtomicInteger(0); //changed here
-    private static final Object mon = new Object(); //changed here
+    private CyclicBarrier barrier;
+    private static AtomicInteger winnerIs = new AtomicInteger(0);
 
     public String getName() {
         return name;
@@ -19,11 +20,12 @@ public class Car implements Runnable {
         return speed;
     }
 
-    public Car(Race race, int speed) {
+    public Car(Race race, int speed, CyclicBarrier barrier) {
         this.race = race;
         this.speed = speed;
         CARS_COUNT++;
         this.name = "Участник #" + CARS_COUNT;
+        this.barrier = barrier;
     }
 
     @Override
@@ -32,32 +34,20 @@ public class Car implements Runnable {
             System.out.println(this.name + " готовится");
             Thread.sleep(500 + (int) (Math.random() * 800));
             System.out.println(this.name + " готов");
+            barrier.await();
+            barrier.await();
+
+            for (int i = 0; i < race.getStages().size(); i++) {
+                race.getStages().get(i).overcome(this);
+            }
+
+            if (winnerIs.incrementAndGet() == 1) {
+                System.out.println(this.name + " ПОБЕДИЛ!");
+            }
+
+            barrier.await();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //changed here
-        synchronized (mon) {
-            allReady.addAndGet(1);
-            if (allReady.get() != CARS_COUNT) {
-                try {
-                    mon.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка началась!!!");
-                mon.notifyAll();
-            }
-        }
-        for (int i = 0; i < race.getStages().size(); i++) {
-            race.getStages().get(i).overcome(this);
-        }
-        //changed here
-        if (allReady.decrementAndGet() == CARS_COUNT - 1) {
-            System.out.println(this.name + " ПОБЕДИЛ!");
-        }
-
-        if (allReady.get() == 0)
-            System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка закончилась!!!");
     }
 }
