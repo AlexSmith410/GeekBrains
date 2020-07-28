@@ -1,0 +1,53 @@
+CREATE SCHEMA univer;
+set search_path to univer;
+
+#task 1 and 9
+CREATE TABLE students (id bigserial primary key,
+						name varchar(255),
+						pass_ser integer not null,
+						pass_num integer not null,
+						unique(series, number)
+);
+
+#task 2
+CREATE TABLE subjects (id bigserial primary key,
+						name varchar(255) not null
+);
+
+#task 3 and 4
+CREATE TABLE progress (id bigserial primary key,
+						stud_id bigint references students (id) on delete cascade,
+						subj_id bigint references subjects (id) on delete cascade,
+						score bigint NOT NULL CHECK(score >= 2 AND score <= 5),
+);
+
+#task 5
+SELECT name, pass_ser, pass_num, score
+FROM students
+INNER JOIN progress
+ON progress.stud_id = students.id
+WHERE subj_id = 1 AND score > 3;
+
+#task 6
+DELETE FROM students WHERE id = 2;
+
+#task 7
+SELECT name, avg(score) AS average_score
+FROM progress
+INNER JOIN subjects
+ON subjects.id = progress.subj_id
+WHERE subj_id = 1;
+
+#task 8
+SELECT name, avg(score) AS average_score
+FROM progress
+INNER JOIN students
+ON students.id = progress.stud_id
+WHERE student_id = 1;
+
+#task 10
+SELECT name, count(*) AS students_count
+FROM progress
+JOIN subjects
+ON subjects.id = progress.subj_id
+WHERE score > 2 GROUP BY subjects.name ORDER BY students_count DESC LIMIT 3;
