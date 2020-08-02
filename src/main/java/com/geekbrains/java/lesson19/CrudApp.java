@@ -18,9 +18,9 @@ public class CrudApp {
 //        runPessimistic(db, cdl, sessionFactory);
         checkTotalSum(db);
         /*
-        Время оптимистической: 12465
-        Время пессимстической: 3083
-        Сумма всех ставок совпадает
+        Optimistic time: 12465
+        Pessimistic time: 3083
+        Total sum is correct
          */
     }
 
@@ -48,7 +48,7 @@ public class CrudApp {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("Время оптимистической блокировки: " + (System.currentTimeMillis() - time));
+        System.out.println("Г‚Г°ГҐГ¬Гї Г®ГЇГІГЁГ¬ГЁГ±ГІГЁГ·ГҐГ±ГЄГ®Г© ГЎГ«Г®ГЄГЁГ°Г®ГўГЄГЁ: " + (System.currentTimeMillis() - time));
     }
 
     public static void runPessimistic(DBApi db, CountDownLatch cdl, SessionFactory sessionFactory){
@@ -65,7 +65,7 @@ public class CrudApp {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("Время пессимистической блокировки: " + (System.currentTimeMillis() - time));
+        System.out.println("Г‚Г°ГҐГ¬Гї ГЇГҐГ±Г±ГЁГ¬ГЁГ±ГІГЁГ·ГҐГ±ГЄГ®Г© ГЎГ«Г®ГЄГЁГ°Г®ГўГЄГЁ: " + (System.currentTimeMillis() - time));
     }
 
     public static void checkTotalSum(DBApi db){
