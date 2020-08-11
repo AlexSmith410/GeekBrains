@@ -1,4 +1,4 @@
-package com.geekbrains.java.lesson18;
+package com.geekbrains.java.lesson19;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,11 +12,11 @@ import java.util.stream.Collectors;
 public class PrepareDataApp {
     public static void forcePrepareData() {
         SessionFactory factory = new Configuration()
-                .configure("hibernate.cfg.xml")
+                .configure("hibernate19.cfg.xml")
                 .buildSessionFactory();
         Session session = null;
         try {
-            String sql = Files.lines(Paths.get("script.sql")).collect(Collectors.joining(" "));
+            String sql = Files.lines(Paths.get("lesson19script.sql")).collect(Collectors.joining(" "));
             session = factory.getCurrentSession();
             session.beginTransaction();
             session.createNativeQuery(sql).executeUpdate();

@@ -13,8 +13,7 @@
         <property name="show_sql">true</property>
         <property name="current_session_context_class">thread</property>
 
-        <mapping class="com.geekbrains.java.lesson18.Consumer"/>
-        <mapping class="com.geekbrains.java.lesson18.Good"/>
-        <mapping class="com.geekbrains.java.lesson18.Purchase"/>
+        <mapping class="com.geekbrains.java.lesson19.User"/>
+        <mapping class="com.geekbrains.java.lesson19.Lot"/>
     </session-factory>
 </hibernate-configuration>
